@@ -18,7 +18,7 @@ const mission = 1000000,
 
 function getAccumulatedMonth(callback) {
   return  Number(money) - (callback(amountFirst, amountSecond));
-};
+}
 
 function getExpensesMonth(amount1, amount2) {
   if (isNaN(amount1)) {
@@ -28,14 +28,13 @@ function getExpensesMonth(amount1, amount2) {
     console.log('Где-то ошибка, скорее всего вы не указали затраты');
   }   //проверка на пустоту
   return amount1 + amount2;
-};
+}
 
 const accumulatedMonth = getAccumulatedMonth(getExpensesMonth);
 
 const showTypeOF = function(data) {
   console.log(typeof(data));
 };
-
 
 // вызов функций typeOf
 showTypeOF(money);
