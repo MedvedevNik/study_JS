@@ -1,6 +1,6 @@
 'use strict';
 
-let isNumber = function(n) {
+const isNumber = function(n) {
   return !isNaN(parseFloat(n)) && isFinite(parseFloat(n));
 };
 
@@ -11,21 +11,17 @@ const
     addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', 'Квартплата, проездной, кредит'),
     deposit = confirm('Есть ли у вас депозит в банке?'),
     mission = 1000000,
-    period = 12;
-
-let expenses = [],
-    money,
+    period = 12,
     start = function() {
-    
       do {
         money = prompt('Ваш месячный доход?');
       } while (!isNumber(money));
     };
 
+let expenses = [],
+    money;
+    
 start();
-
-// Использование callback
-// Рассчёты расходов и т.д.
 
 
 const  getExpensesMonth = function() {
@@ -36,7 +32,7 @@ const  getExpensesMonth = function() {
     expenses[i] = prompt('Введите обязательную статью расходов?', 'продукты');
     
     do {
-      sum = prompt('Во сколько обойдется?');
+      sum += prompt('Во сколько обойдется?');
     } while (!isNumber(sum));
     
   }
