@@ -73,7 +73,7 @@ if (isNaN(accumulatedMonth)) {
   console.log('Где-то ошибка, проверьте числа, которые вы ввели');
 } else {
   console.log('Бюджет на месяц', accumulatedMonth);
-  if (getTargetMonth() > 0) {
+  if (getTargetMonth() < 0) {
     console.log('Цель не будет достигнута');
   } else {
     console.log('Цель будет достигнута за:', getTargetMonth(), 'месяцев');
