@@ -1,7 +1,7 @@
 'use strict';
 
 const isNumber = function(n) {
-  return !isNaN(parseFloat(n)) && isFinite(parseFloat(n));
+  return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
 //обьявление переменных
@@ -29,13 +29,16 @@ const  getExpensesMonth = function() {
   
   for (let i = 0; i < 2; i++) {
 
-    expenses[i] = prompt('Введите обязательную статью расходов?', 'продукты');
+    expenses[i] = prompt('Введите обязательную статью расходов?');
     
-    do {
-      sum += prompt('Во сколько обойдется?');
-    } while (!isNumber(sum));
-    
-  }
+    sum += (() => {
+      let n = 0;
+      do {
+          n = prompt('Во сколько это обойдется?');
+      } while (!isNumber(n));
+      return +n;
+  })();
+  };
 
   return sum;
 };
