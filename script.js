@@ -56,10 +56,10 @@ let chapterArr = [],
 
   elem.forEach(element => {
     if (element.textContent.indexOf('Введение') > -1) {
-      collection.beforeend(element, elem[0]);
+      collection.before(element, elem[0]);
     }
     if (element.textContent.indexOf('Предисловие') > -1) {
-      collection.beforeend(element, elem[1]);
+      collection.before(element, elem[1]);
     }
     if (element.textContent.indexOf('Глава') > -1) {
       chapterArr.push(element);
@@ -85,5 +85,6 @@ sortChapter(books[0].children[4].querySelector('ul'));
 // добавляем новую главу
 newChapter.innerText = 'Глава 8: За пределами ES6';
 books[0].children[5].querySelector('ul').append(newChapter);
+sortChapter(books[0].children[5].querySelector('ul'));
 
 
