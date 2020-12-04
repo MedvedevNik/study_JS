@@ -171,6 +171,11 @@ const appData = {
   },
   disStart: function() {
     btnStart.disabled = !inputMoney.value.trim();
+    btnStart.style.cursor = 'not-allowed';
+    
+    if (inputMoney.value.trim() !== '') {
+      btnStart.style.cursor = 'pointer';
+    }
   }
 };
 
