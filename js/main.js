@@ -3,6 +3,7 @@
 
 // обьявление переменных и присвоение им элементов
 const btnStart = document.getElementById('start'),
+  btnCancel = document.querySelector('#cancel'),
   btnIncome = document.getElementsByTagName('button')[0],
   btnExpenses = document.getElementsByTagName('button')[1],
   checkDeposit = document.querySelector('#deposit-check'),
@@ -53,22 +54,29 @@ const appData = {
     this.getBudget();
     this.showResult();
   
-    if (btnStart.textContent === 'Рассчитать') {
+    if (btnStart.style.display !== 'none') {
+      btnStart.style.display = 'none';
+      btnCancel.style.display = 'block';
       this.blockInput();
-      btnStart.textContent = 'Сбросить';
+      
     } else {
-      btnStart.textContent = 'Рассчитать';
+      btnStart.style.display = 'block';
+      btnCancel.style.display = 'none';
       this.reset();
     }
 
   },
   reset: function() {
-    for (let i = incomeItems.length - 1; i > 0; i--) {
-      incomeItems[0].parentNode.removeChild(incomeItems[i]);
-    }
-    for (let i = expensesItems.length - 1; i > 0; i--) {
-        expensesItems[0].parentNode.removeChild(expensesItems[i]);
-    }
+    incomeItems.forEach(function(item, i) {
+      if (i > 0 && i < 3) {
+        item.remove();
+      }
+    });
+    expensesItems.forEach(function(item, i) {
+      if (i > 0 && i < 3) {
+        item.remove();
+      }
+    });
     btnIncome.style.display = '';
     btnExpenses.style.display = '';
     this.blockInput(false);
@@ -77,6 +85,19 @@ const appData = {
       item.value = '';
     });
     selectPeriod.value = document.querySelector('.period-amount').textContent = 1;
+
+    this.budget = 0;
+    this.budgetDay = 0;
+    this.budgetMonth = 0;
+    this.expensesMonth = 0;
+    this.income = {};
+    this.incomeMonth = 0;
+    this.addIncome = [];
+    this.expenses = {};
+    this.addExpenses = [];
+    this.deposit = false;
+    this.percentDeposit = 0;
+    this.moneyDeposit = 0;
     this.disStart();
   },
   blockInput: function(disabled = true) {
@@ -110,8 +131,8 @@ const appData = {
     const cloneIncomeItem = incomeItems[0].cloneNode(true);
 
     incomeItems[0].parentNode.insertBefore(cloneIncomeItem, btnIncome);
-    cloneIncomeItem.querySelector('.income-title').value = '';
-    cloneIncomeItem.querySelector('.income-amount').value = '';
+    cloneIncomeItem.querySelectorAll('.income-title').value = '';
+    cloneIncomeItem.querySelectorAll('.income-amount').value = '';
 
     incomeItems = document.querySelectorAll('.income-items');
 
@@ -120,7 +141,7 @@ const appData = {
     }
   },
   getExpenses: function() {
-    expensesItems.forEach(function(item) {
+    document.querySelectorAll('.expenses-items').forEach(function(item) {
       const itemExpenses = item.querySelector('.expenses-title').value,
         cashExpenses = item.querySelector('.expenses-amount').value;
         if(itemExpenses !== '' && cashExpenses !== '') {
@@ -129,7 +150,7 @@ const appData = {
     }, appData);
   },
   getIncome: function() {
-    incomeItems.forEach(function(item) {
+    document.querySelectorAll('.income-items').forEach(function(item) {
       const itemIncome = item.querySelector('.income-title').value,
         cashIncome = item.querySelector('.income-amount').value;
         if (itemIncome !== '' && cashIncome !== '') {
@@ -140,20 +161,22 @@ const appData = {
   },
   getAddExpenses: function() {
     const addExpenses = additionalExpensesItem.value.split(',');
+    const _this = this;
     addExpenses.forEach(function(item) {
       item = item.trim();
       if (item !== '') {
-        this.addExpenses.push(item);
+        _this.addExpenses.push(item);
       }
-    }, appData);
+    });
   },
   getAddIncome: function() {
+    const _this = this;
     addItemIncome.forEach(function(item) {
       const itemValue = item.value.trim();
       if (itemValue !== '') {
-        this.addIncome.push(itemValue);
+        _this.addIncome.push(itemValue);
       }
-    }, appData);
+    });
   },
   getExpensesMonth: function() {
     for (let item in this.expenses) {
@@ -211,6 +234,7 @@ const foo = appData.start.bind(appData);
 
 appData.disStart();
 btnStart.addEventListener('click', foo);
+btnCancel.addEventListener('click', foo);
 
 btnIncome.addEventListener('click', appData.addIncomeBlock);
 btnExpenses.addEventListener('click', appData.addExpensesBlock);
