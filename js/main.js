@@ -79,12 +79,16 @@ AppData.prototype.reset = function() {
     item.value = '';
   });
 
-  for (let i = 1; i < incomeItems.length; i++) {
-    incomeItems[i].parentNode.removeChild(incomeItems[i]);
-  }
-  for (let i = 1; i < expensesItems.length; i++) {
-    expensesItems[i].parentNode.removeChild(expensesItems[i]);
-  }
+  incomeItems.forEach(function(item, i) {
+    if (i > 0 && i < 3) {
+      item.remove();
+    }
+  });
+  expensesItems.forEach(function(item, i) {
+    if (i > 0 && i < 3) {
+      item.remove();
+    }
+  });
 
   btnIncome.setAttribute('disabled','false');
   btnIncome.setAttribute('disabled','false');
