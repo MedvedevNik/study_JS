@@ -114,6 +114,7 @@ class AppData {
     depositBank.style.display = 'none';
     depositAmount.style.display = 'none';
     depositPercent.style.display = 'none';
+    depositBank.value = '0';
     depositCheck.checked = false;
     btnCancel.style.display = 'none';
     btnStart.style.display = 'block';
