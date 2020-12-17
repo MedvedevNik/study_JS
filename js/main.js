@@ -6,7 +6,7 @@ const btnStart = document.getElementById('start'),
   btnCancel = document.querySelector('#cancel'),
   btnIncome = document.getElementsByTagName('button')[0],
   btnExpenses = document.getElementsByTagName('button')[1],
-  checkDeposit = document.querySelector('#deposit-check'),
+  depositCheck = document.querySelector('#deposit-check'),
   addItemIncome = document.querySelectorAll('.additional_income-item'),
   budgetMonthValue = document.getElementsByClassName('budget_month-value')[0],
   budgetDayValue = document.getElementsByClassName('budget_day-value')[0],
@@ -22,6 +22,7 @@ const btnStart = document.getElementById('start'),
   targetAmount = document.querySelector('.target-amount'),
   selectPeriod = document.querySelector('.period-select'),
   periodAmount = document.querySelector('.period-amount'),
+  depositBank = document.querySelector('.deposit-bank'),
   isNumber = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
   };
@@ -44,7 +45,7 @@ class AppData {
     this.percentDeposit = 0;
     this.moneyDeposit = 0;
   }
-    start() {
+  start() {
     const allInput = document.querySelectorAll('.data input[type = text]');
     allInput.forEach(item => {
       item.setAttribute('disabled','true');
@@ -60,6 +61,7 @@ class AppData {
     this.getExpensesMonth();
     this.getAddExpenses();
     this.getAddIncome();
+    this.getInfoDeposit();
     this.getBudget();
     this.showResult();
   }
@@ -209,7 +211,8 @@ class AppData {
   }
 
   getBudget() {
-    this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth;
+    const monthDeposit = this.moneyDeposit * (this.percentDeposit / 100);
+    this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth + monthDeposit;
     this.budgetDay = Math.floor(this.budgetMonth / 30);
   }
 
@@ -230,7 +233,10 @@ class AppData {
   }
 
   getInfoDeposit(){
-    this.moneyDeposit = 0;
+    if (this.deposit) {
+      this.percentDeposit = depositPercent.value;
+      this.moneyDeposit = depositAmount.value;
+    }
   }
 
   calcSavedMoney() {
@@ -251,17 +257,52 @@ class AppData {
     }
   }
 
+  changePercent() {
+    const valueSelect = this.value;
+    if (valueSelect === 'other') {
+      depositPercent.disabled = false;
+      depositPercent.style.display = 'inline-block';
+      depositPercent.value = '';
+      // ДЗ
+    } else {
+      depositPercent.disabled = true;
+      depositPercent.style.display = 'none';
+      depositPercent.value = valueSelect;
+    }
+  }
+
+  depositHandler() {
+    if (depositCheck.checked) {
+      depositBank.style.display = 'inline-block';
+      depositAmount.style.display = 'inline-block';
+      this.deposit = true;
+      depositBank.addEventListener('change', this.changePercent);
+    } else {
+      depositBank.style.display = 'none';
+      depositAmount.style.display = 'none';
+      depositPercent.style.display = 'none';
+      depositBank.value = '0';
+      depositAmount.value = '';
+      depositPercent.value = '';
+      this.deposit = false;
+      depositBank.removeEventListener('change', this.changePercent);
+    }
+    this.disStart();
+  }
+
   eventsListeners() {
 
     this.disStart();
   
-    btnStart.addEventListener('click', appData.start.bind(appData));
-    btnCancel.addEventListener('click', appData.reset.bind(appData));
+    btnStart.addEventListener('click', this.start.bind(this));
+    btnCancel.addEventListener('click', this.reset.bind(this));
   
-    btnIncome.addEventListener('click', appData.addIncomeBlock);
-    btnExpenses.addEventListener('click', appData.addExpensesBlock);
-    selectPeriod.addEventListener('input', appData.changePriod.bind(appData));
-    inputMoney.addEventListener('input', appData.disStart);
+    btnIncome.addEventListener('click', this.addIncomeBlock);
+    btnExpenses.addEventListener('click', this.addExpensesBlock);
+    selectPeriod.addEventListener('input', this.changePriod.bind(this));
+    inputMoney.addEventListener('input', this.disStart);
+
+    depositCheck.addEventListener('change', this.depositHandler.bind(this));
   }
 };
 
