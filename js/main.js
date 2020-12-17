@@ -110,9 +110,14 @@ class AppData {
     this.deposit = false;
     this.percentDeposit = 0;
     this.moneyDeposit = 0;
-    
+
+    depositBank.style.display = 'none';
+    depositAmount.style.display = 'none';
+    depositPercent.style.display = 'none';
+    depositCheck.checked = false;
     btnCancel.style.display = 'none';
     btnStart.style.display = 'block';
+
 
     this.disStart();
   }
@@ -263,10 +268,9 @@ class AppData {
       depositPercent.disabled = false;
       depositPercent.style.display = 'inline-block';
       depositPercent.value = '';
-      // ДЗ
     } else {
       depositPercent.disabled = true;
-      depositPercent.style.display = 'none';
+      
       depositPercent.value = valueSelect;
     }
   }
