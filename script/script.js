@@ -106,4 +106,56 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     togglePopUp();
+
+
+    //animate
+    const anchors = document.querySelectorAll('menu a');
+
+    for (const anchor of anchors) {
+        anchor.addEventListener('click', e => {
+            e.preventDefault();
+            const blockID = anchor.getAttribute('href').substr(1);
+            document.getElementById(blockID).scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+    }
+
+
+    const animateScroll = () => {
+
+        const target = event.target.closest('[href^="#"]'),
+            speed = 0.85;
+
+
+        if (target) {
+            const pageY = window.pageYOffset,
+                hash = target.href.replace(/[^#]*(.*)/, '$1'),
+                distTopPosition = document.querySelector(hash).getBoundingClientRect().top;
+
+            let start = 0;
+
+            console.log(!start);
+
+            const step = time => {
+                if (!start) start = time;
+
+                const progress = time - start;
+
+                const r = (distTopPosition < 0 ?
+                    Math.max(pageY - progress / speed, pageY + distTopPosition) :
+                    Math.min(pageY + progress / speed, pageY + distTopPosition));
+
+                window.scrollTo(0, r);
+
+                if (r < pageY + distTopPosition) requestAnimationFrame(step);
+            };
+
+            requestAnimationFrame(step);
+
+        }
+    };
+
+    document.querySelector('main a').addEventListener('click', animateScroll);
 });
