@@ -38,17 +38,18 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        const idInterval = setInterval(updateClock, 1000);
+        updateClock();
+        let idInterval = setInterval(updateClock, 1000);
     };
 
-    countTimer('20 december 2020');
+    countTimer('30 december 2020');
 
     // menu
     const toggleMenu = () => {
         const btnMenu = document.querySelector('.menu'),
             menu = document.querySelector('menu'),
             closeBtn = document.querySelector('.close-btn'),
-            menuItems = menu.querySelectorAll('ul>li');
+            menuItems = menu.querySelectorAll('ul>li a');
 
         const handlerMenu = () => {
             menu.classList.toggle('active-menu');
@@ -109,7 +110,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     //animate
-    const anchors = document.querySelectorAll('menu a');
+    const anchors = document.querySelectorAll('menu>ul a');
 
     for (const anchor of anchors) {
         anchor.addEventListener('click', e => {
@@ -136,7 +137,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
             let start = 0;
 
-            console.log(!start);
 
             const step = time => {
                 if (!start) start = time;
