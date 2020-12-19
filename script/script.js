@@ -44,118 +44,118 @@ window.addEventListener('DOMContentLoaded', () => {
 
     countTimer('30 december 2020');
 
-    // menu
-    const toggleMenu = () => {
-        const btnMenu = document.querySelector('.menu'),
-            menu = document.querySelector('menu'),
-            closeBtn = document.querySelector('.close-btn'),
-            menuItems = menu.querySelectorAll('ul>li a');
+    // // menu
+    // const toggleMenu = () => {
+    //     const btnMenu = document.querySelector('.menu'),
+    //         menu = document.querySelector('menu'),
+    //         closeBtn = document.querySelector('.close-btn'),
+    //         menuItems = menu.querySelectorAll('ul>li a');
 
-        const handlerMenu = () => {
-            menu.classList.toggle('active-menu');
-        };
-
-
-        btnMenu.addEventListener('click', handlerMenu);
-        closeBtn.addEventListener('click', handlerMenu);
-        menuItems.forEach(elem => elem.addEventListener('click', handlerMenu));
-    };
-
-    toggleMenu();
-
-    // popup
-
-    const togglePopUp = () => {
-        const popup = document.querySelector('.popup'),
-            popupBtn = document.querySelectorAll('.popup-btn'),
-            popUpClose = document.querySelector('.popup-close'),
-            popupContent = document.querySelector('.popup-content'),
-            popupAnimate = {
-                count: -1200,
-                speed: 12,
-                startPos: -1200,
-                endPos: 0
-            };
+    //     const handlerMenu = () => {
+    //         menu.classList.toggle('active-menu');
+    //     };
 
 
-        const showPopup = () => {
-            popupAnimate.startPos > popupAnimate.endPos ?
-                popupAnimate.count -= popupAnimate.speed :
-                popupAnimate.count += popupAnimate.speed;
-            popupContent.style.transform = `translateX(${popupAnimate.count}px)`;
+    //     btnMenu.addEventListener('click', handlerMenu);
+    //     closeBtn.addEventListener('click', handlerMenu);
+    //     menuItems.forEach(elem => elem.addEventListener('click', handlerMenu));
+    // };
 
-            if (popupAnimate.startPos > popupAnimate.endPos ?
-                popupAnimate.count > popupAnimate.endPos :
-                popupAnimate.count < popupAnimate.endPos) {
-                requestAnimationFrame(showPopup);
-            }
-        };
+    // toggleMenu();
 
-        popupBtn.forEach(elem => {
-            elem.addEventListener('click', () => {
-                popup.style.display = 'block';
-                if (screen.width > 768) {
-                    popupAnimate.count = popupAnimate.startPos;
-                    requestAnimationFrame(showPopup);
-                }
-            });
-        });
+    // // popup
 
-        popUpClose.addEventListener('click', () => {
-            popup.style.display = 'none';
-        });
-    };
-
-    togglePopUp();
+    // const togglePopUp = () => {
+    //     const popup = document.querySelector('.popup'),
+    //         popupBtn = document.querySelectorAll('.popup-btn'),
+    //         popUpClose = document.querySelector('.popup-close'),
+    //         popupContent = document.querySelector('.popup-content'),
+    //         popupAnimate = {
+    //             count: -1200,
+    //             speed: 12,
+    //             startPos: -1200,
+    //             endPos: 0
+    //         };
 
 
-    //animate
-    const anchors = document.querySelectorAll('menu>ul a');
+    //     const showPopup = () => {
+    //         popupAnimate.startPos > popupAnimate.endPos ?
+    //             popupAnimate.count -= popupAnimate.speed :
+    //             popupAnimate.count += popupAnimate.speed;
+    //         popupContent.style.transform = `translateX(${popupAnimate.count}px)`;
 
-    for (const anchor of anchors) {
-        anchor.addEventListener('click', e => {
-            e.preventDefault();
-            const blockID = anchor.getAttribute('href').substr(1);
-            document.getElementById(blockID).scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        });
-    }
+    //         if (popupAnimate.startPos > popupAnimate.endPos ?
+    //             popupAnimate.count > popupAnimate.endPos :
+    //             popupAnimate.count < popupAnimate.endPos) {
+    //             requestAnimationFrame(showPopup);
+    //         }
+    //     };
+
+    //     popupBtn.forEach(elem => {
+    //         elem.addEventListener('click', () => {
+    //             popup.style.display = 'block';
+    //             if (screen.width > 768) {
+    //                 popupAnimate.count = popupAnimate.startPos;
+    //                 requestAnimationFrame(showPopup);
+    //             }
+    //         });
+    //     });
+
+    //     popUpClose.addEventListener('click', () => {
+    //         popup.style.display = 'none';
+    //     });
+    // };
+
+    // togglePopUp();
 
 
-    const animateScroll = () => {
+    // //animate
+    // const anchors = document.querySelectorAll('menu>ul a');
 
-        const target = event.target.closest('[href^="#"]'),
-            speed = 0.85;
+    // for (const anchor of anchors) {
+    //     anchor.addEventListener('click', e => {
+    //         e.preventDefault();
+    //         const blockID = anchor.getAttribute('href').substr(1);
+    //         document.getElementById(blockID).scrollIntoView({
+    //             behavior: 'smooth',
+    //             block: 'start'
+    //         });
+    //     });
+    // }
 
 
-        if (target) {
-            const pageY = window.pageYOffset,
-                hash = target.href.replace(/[^#]*(.*)/, '$1'),
-                distTopPosition = document.querySelector(hash).getBoundingClientRect().top;
+    // const animateScroll = () => {
 
-            let start = 0;
+    //     const target = event.target.closest('[href^="#"]'),
+    //         speed = 0.85;
 
 
-            const step = time => {
-                if (!start) start = time;
+    //     if (target) {
+    //         const pageY = window.pageYOffset,
+    //             hash = target.href.replace(/[^#]*(.*)/, '$1'),
+    //             distTopPosition = document.querySelector(hash).getBoundingClientRect().top;
 
-                const progress = time - start;
+    //         let start = 0;
 
-                const r = (distTopPosition < 0 ?
-                    Math.max(pageY - progress / speed, pageY + distTopPosition) :
-                    Math.min(pageY + progress / speed, pageY + distTopPosition));
 
-                window.scrollTo(0, r);
+    //         const step = time => {
+    //             if (!start) start = time;
 
-                if (r < pageY + distTopPosition) requestAnimationFrame(step);
-            };
+    //             const progress = time - start;
 
-            requestAnimationFrame(step);
+    //             const r = (distTopPosition < 0 ?
+    //                 Math.max(pageY - progress / speed, pageY + distTopPosition) :
+    //                 Math.min(pageY + progress / speed, pageY + distTopPosition));
 
-        }
-    };
+    //             window.scrollTo(0, r);
 
-    document.querySelector('main a').addEventListener('click', animateScroll);
+    //             if (r < pageY + distTopPosition) requestAnimationFrame(step);
+    //         };
+
+    //         requestAnimationFrame(step);
+
+    //     }
+    // };
+
+    // document.querySelector('main a').addEventListener('click', animateScroll);
 });
