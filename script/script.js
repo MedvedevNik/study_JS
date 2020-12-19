@@ -1,12 +1,12 @@
 window.addEventListener('DOMContentLoaded', () => {
 
     // Timer
-    function countTimer(deadline) {
+    const countTimer = deadline => {
         const timerHours = document.querySelector('#timer-hours'),
             timerMinutes = document.querySelector('#timer-minutes'),
             timerSeconds = document.querySelector('#timer-seconds');
 
-        function getTimeRemaining() {
+        const getTimeRemaining = () => {
             const dateStop = new Date(deadline).getTime(),
                 dateNow = new Date().getTime(),
                 timeRemaining = (dateStop - dateNow) / 1000,
@@ -14,18 +14,16 @@ window.addEventListener('DOMContentLoaded', () => {
                 minutes = Math.floor((timeRemaining / 60) % 60),
                 hours = Math.floor(timeRemaining / 60 / 60);
             return { timeRemaining, hours, minutes, seconds };
-        }
+        };
 
-        function addZero(item) {
+        const addZero = item => {
             if (item < 10) {
                 item = '0' + item;
             }
             return item;
-        }
+        };
 
-        const idInterval = setInterval(updateClock, 1000);
-
-        function updateClock() {
+        const updateClock = () => {
             const timer = getTimeRemaining();
 
             timerHours.textContent = addZero(timer.hours);
@@ -38,8 +36,74 @@ window.addEventListener('DOMContentLoaded', () => {
                 dateStop.setDate(dateStop.getTime() + 1);
                 countTimer(dateStop);
             }
-        }
-    }
+        };
+
+        const idInterval = setInterval(updateClock, 1000);
+    };
 
     countTimer('20 december 2020');
+
+    // menu
+    const toggleMenu = () => {
+        const btnMenu = document.querySelector('.menu'),
+            menu = document.querySelector('menu'),
+            closeBtn = document.querySelector('.close-btn'),
+            menuItems = menu.querySelectorAll('ul>li');
+
+        const handlerMenu = () => {
+            menu.classList.toggle('active-menu');
+        };
+
+
+        btnMenu.addEventListener('click', handlerMenu);
+        closeBtn.addEventListener('click', handlerMenu);
+        menuItems.forEach(elem => elem.addEventListener('click', handlerMenu));
+    };
+
+    toggleMenu();
+
+    // popup
+
+    const togglePopUp = () => {
+        const popup = document.querySelector('.popup'),
+            popupBtn = document.querySelectorAll('.popup-btn'),
+            popUpClose = document.querySelector('.popup-close'),
+            popupContent = document.querySelector('.popup-content'),
+            popupAnimate = {
+                count: -1200,
+                speed: 12,
+                startPos: -1200,
+                endPos: 0
+            };
+
+
+        const showPopup = () => {
+            popupAnimate.startPos > popupAnimate.endPos ?
+                popupAnimate.count -= popupAnimate.speed :
+                popupAnimate.count += popupAnimate.speed;
+            popupContent.style.transform = `translateX(${popupAnimate.count}px)`;
+
+            if (popupAnimate.startPos > popupAnimate.endPos ?
+                popupAnimate.count > popupAnimate.endPos :
+                popupAnimate.count < popupAnimate.endPos) {
+                requestAnimationFrame(showPopup);
+            }
+        };
+
+        popupBtn.forEach(elem => {
+            elem.addEventListener('click', () => {
+                popup.style.display = 'block';
+                if (screen.width > 768) {
+                    popupAnimate.count = popupAnimate.startPos;
+                    requestAnimationFrame(showPopup);
+                }
+            });
+        });
+
+        popUpClose.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+    };
+
+    togglePopUp();
 });
