@@ -16,44 +16,30 @@ window.addEventListener('DOMContentLoaded', () => {
             return { timeRemaining, hours, minutes, seconds };
         }
 
+        function addZero(item) {
+            if (item < 10) {
+                item = '0' + item;
+            }
+            return item;
+        }
+
+        const idInterval = setInterval(updateClock, 1000);
+
         function updateClock() {
             const timer = getTimeRemaining();
 
-            if (timer.hours > 0) {
-                if (timer.hours > 10) {
-                    timerHours.textContent = timer.hours;
-                } else {
-                    timerHours.textContent = '0' + timer.hours;
-                }
-            } else {
-                timerHours.textContent = '00';
-            }
-            if (timer.minutes > 0) {
-                if (timer.hours > 10) {
-                    timerMinutes.textContent = timer.minutes;
-                } else {
-                    timerMinutes.textContent = '0' + timer.minutes;
-                }
-            } else {
-                timerMinutes.textContent = '00';
-            }
-            if (timer.seconds > 0) {
-                if (timer.hours > 10) {
-                    timerSeconds.textContent = timer.seconds;
-                } else {
-                    timerSeconds.textContent = '0' + timer.seconds;
-                }
-            } else {
-                timerSeconds.textContent = '00';
-            }
+            timerHours.textContent = addZero(timer.hours);
+            timerMinutes.textContent = addZero(timer.minutes);
+            timerSeconds.textContent = addZero(timer.seconds);
 
-            if (timer.timeRemaining > 0) {
-                setTimeout(updateClock, 1000);
+            if (timer.timeRemaining < 0) {
+                clearInterval(idInterval);
+                const dateStop = new Date(deadline);
+                dateStop.setDate(dateStop.getTime() + 1);
+                countTimer(dateStop);
             }
         }
-
-        updateClock();
     }
 
-    setInterval(countTimer, 1000, '20 december 2020');
+    countTimer('20 december 2020');
 });
