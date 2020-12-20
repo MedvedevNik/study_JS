@@ -53,12 +53,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
             const activeMenu = () => {
                 menu.classList.toggle('active-menu');
-            } 
+            };
 
-            if (target.closest('.menu')) {
-                activeMenu()
-            } else {
+            if (target.closest('.menu') || (!target.closest('menu') && menu.classList.contains('active-menu'))) {
                 activeMenu();
+            } else if (target.closest('menu') && target.closest('[href^="#"]')) {
+                activeMenu();
+
                 if (!target.classList.contains('close-btn')) {
                     animateScroll();
                 }
@@ -66,7 +67,7 @@ window.addEventListener('DOMContentLoaded', () => {
         };
 
         document.body.addEventListener('click', handlerMenu);
-    }
+    };
 
     toggleMenu();
 
@@ -228,4 +229,113 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     tabs();
+
+    // slider
+
+    const slider = () => {
+        const slide = document.querySelectorAll('.portfolio-item'),
+            dot = document.querySelectorAll('.dot'),
+            slider = document.querySelector('.portfolio-content');
+
+        let currentSlide = 0,
+            interval;
+
+        const prevSlide = (elem, index, strClass) => {
+            elem[index].classList.remove(strClass);
+        };
+
+        const nextSlide = (elem, index, strClass) => {
+            elem[index].classList.add(strClass);
+        };
+
+        const autoPlaySlide = () => {
+
+            prevSlide(slide, currentSlide, 'portfolio-item-active');
+            prevSlide(dot, currentSlide, 'dot-active');
+            currentSlide++;
+            if (currentSlide >= slide.length) {
+                currentSlide = 0;
+            }
+            nextSlide(slide, currentSlide, 'portfolio-item-active');
+            nextSlide(dot, currentSlide, 'dot-active');
+        };
+
+        const startSlide = (time = 3000) => {
+            interval = setInterval(autoPlaySlide, time);
+        };
+
+        const stopSlide = () => {
+            clearInterval(interval);
+        };
+
+        slider.addEventListener('click', event => {
+            event.preventDefault();
+
+            const target = event.target;
+
+            if (!target.matches('.portfolio-btn, .dot')) {
+                return;
+            }
+
+            prevSlide(slide, currentSlide, 'portfolio-item-active');
+            prevSlide(dot, currentSlide, 'dot-active');
+
+            if (target.matches('#arrow-right')) {
+                currentSlide++;
+            } else if (target.matches('#arrow-left')) {
+                currentSlide--;
+            } else if (target.matches('.dot')) {
+                dot.forEach((elem, index) => {
+                    if (elem === target) {
+                        currentSlide = index;
+                    }
+                });
+            }
+
+            if (currentSlide >= slide.length) {
+                currentSlide = 0;
+            }
+
+
+            if (currentSlide < 0) {
+                currentSlide = slide.length;
+            }
+
+            nextSlide(slide, currentSlide, 'portfolio-item-active');
+            nextSlide(dot, currentSlide, 'dot-active');
+
+        });
+
+        slider.addEventListener('mouseover', event => {
+            if (event.target.matches('.portfolio-btn') ||
+            event.target.matches('.dot')) {
+                stopSlide();
+            }
+        });
+
+        slider.addEventListener('mouseout', event => {
+            if (event.target.matches('.portfolio-btn') ||
+            event.target.matches('.dot')) {
+                startSlide();
+            }
+        });
+
+        startSlide(1500);
+    };
+
+
+    const addDot = () => {
+        const portfolioItem = document.querySelectorAll('.portfolio-item'),
+            portfolioDots = document.querySelector('.portfolio-dots');
+
+        portfolioItem.forEach(() => {
+            const dot = document.createElement('li');
+            dot.classList.add('dot');
+            portfolioDots.append(dot);
+        });
+        portfolioDots.children[0].classList.add('dot-active');
+    };
+
+    addDot();
+    slider();
 });
