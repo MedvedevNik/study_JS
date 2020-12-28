@@ -357,7 +357,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const checkCalcBlock = () => {
         const calcBlock = document.querySelector('.calc-block');
 
-        calcBlock.addEventListener('input', (event) => {
+        calcBlock.addEventListener('input', event => {
             if (event.target.type !== 'number') {
                 event.target.value = event.target.value.replace(/\D/g, '');
             }
@@ -376,7 +376,9 @@ window.addEventListener('DOMContentLoaded', () => {
         const countSum = () => {
             let total = 0,
                 countValue = 1,
-                dayValue = 1;
+                dayValue = 1,
+                step = 1;
+
             const typeValue = calcType.options[calcType.selectedIndex].value,
                 squareValue = +calcSquare.value;
 
@@ -390,14 +392,26 @@ window.addEventListener('DOMContentLoaded', () => {
                 dayValue *= 1.5;
             }
 
-            if (!!typeValue && !!squareValue) {
+            if (typeValue && squareValue) {
                 total = price * typeValue  * squareValue * countValue * dayValue;
             }
 
-            totalValue.textContent = total;
+            if (totalValue.textContent !== total) {
+                if (totalValue.textContent > total) {
+                    step = -1;
+                }
+
+                const timer = setInterval(() => {
+                    totalValue.textContent = +totalValue.textContent + step;
+                    if ((total - totalValue.textContent) * step < 1) {
+                        clearInterval(timer);
+                        totalValue.textContent = total;
+                    }
+                }, 0);
+            }
         };
 
-        calcBlock.addEventListener('change', (event) => {
+        calcBlock.addEventListener('change', event => {
             const target  = event.target;
 
             if (target.matches('.calc-day') || target.matches('.calc-type') ||
@@ -405,7 +419,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 countSum();
             }
         });
-    }
+    };
 
     addDot();
     changeImg();
