@@ -336,6 +336,36 @@ window.addEventListener('DOMContentLoaded', () => {
         portfolioDots.children[0].classList.add('dot-active');
     };
 
+    const changeImg = () => {
+        const img = document.querySelector('#command .row');
+
+        const changingPhotos = () => {
+            const target = event.target;
+
+            if (target.classList.contains('command__photo')) {
+                const lastSrc = target.src;
+
+                target.src = target.dataset.img;
+                target.dataset.img = lastSrc;
+            }
+        };
+
+        img.addEventListener('mouseover', changingPhotos);
+        img.addEventListener('mouseout', changingPhotos);
+    };
+
+    const checkCalcBlock = () => {
+        const calcBlock = document.querySelector('.calc-block');
+
+        calcBlock.addEventListener('input', (event) => {
+            if (event.target.type !== 'number') {
+                event.target.value = event.target.value.replace(/\D/g, '');
+            }
+        });
+    };
+
     addDot();
+    changeImg();
+    checkCalcBlock();
     slider();
 });
