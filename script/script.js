@@ -358,7 +358,10 @@ window.addEventListener('DOMContentLoaded', () => {
         const calcBlock = document.querySelector('.calc-block');
 
         calcBlock.addEventListener('input', event => {
-            if (event.target.type !== 'number') {
+            const target = event.target;
+
+            if (target.matches('.calc-day') ||
+            target.matches('.calc-square') || target.matches('.calc-count')) {
                 event.target.value = event.target.value.replace(/\D/g, '');
             }
         });
