@@ -42,7 +42,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const idInterval = setInterval(updateClock, 1000);
     };
 
-    countTimer('30 december 2020');
+    countTimer('20 january 2021');
 
     // menu
     const toggleMenu = () => {
@@ -72,7 +72,6 @@ window.addEventListener('DOMContentLoaded', () => {
     toggleMenu();
 
     // popup
-
     const togglePopUp = () => {
         const popUp = document.querySelector('.popup'),
             popupBtn = document.querySelectorAll('.popup-btn'),
@@ -148,7 +147,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
         if (target) {
-            const pageY = window.pageYOffset,
+            const scrollPageY = window.scrollPageYOffset,
                 hash = target.href.replace(/[^#]*(.*)/, '$1'),
                 distTopPosition = document.querySelector(hash).getBoundingClientRect().top;
 
@@ -160,13 +159,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
                 const progress = time - start;
 
-                const r = (distTopPosition < 0 ?
-                    Math.max(pageY - progress / speed, pageY + distTopPosition) :
-                    Math.min(pageY + progress / speed, pageY + distTopPosition));
+                const result = (distTopPosition < 0 ?
+                    Math.max(scrollPageY - progress / speed, scrollPageY + distTopPosition) :
+                    Math.min(scrollPageY + progress / speed, scrollPageY + distTopPosition));
 
-                window.scrollTo(0, r);
+                window.scrollTo(0, result);
 
-                if (r < pageY + distTopPosition) requestAnimationFrame(step);
+                if (result < scrollPageY + distTopPosition) requestAnimationFrame(step);
             };
 
             requestAnimationFrame(step);
@@ -199,23 +198,6 @@ window.addEventListener('DOMContentLoaded', () => {
             let target = event.target;
 
             target = target.closest('.service-header-tab');
-
-            //старый вариант
-            // while (target !== tabHeader) {
-
-            //     if (target.classList.contains('service-header-tab')) {
-
-            //         tab.forEach((item, i) => {
-
-            //             if (item === target) {
-            //                 toggleTabContent(i);
-            //             }
-
-            //         });
-            //         return;
-            //     }
-            //     target = target.parentNode;
-            // }
 
             if (target) {
                 tab.forEach((item, i) => {
@@ -405,8 +387,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
 
                 const timer = setInterval(() => {
-                    totalValue.textContent = +totalValue.textContent + step;
-                    if ((total - totalValue.textContent) * step < 1) {
+                    totalValue.textContent = +totalValue.textContent + (step * 200);
+                    if ((total - totalValue.textContent) * (step * 200)  < 1) {
                         clearInterval(timer);
                         totalValue.textContent = total;
                     }
