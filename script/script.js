@@ -42,7 +42,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const idInterval = setInterval(updateClock, 1000);
     };
 
-    countTimer('30 december 2020');
+    countTimer('20 january 2021');
 
     // menu
     const toggleMenu = () => {
@@ -148,7 +148,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
         if (target) {
-            const pageY = window.pageYOffset,
+            const scrollPageY = window.scrollPageYOffset,
                 hash = target.href.replace(/[^#]*(.*)/, '$1'),
                 distTopPosition = document.querySelector(hash).getBoundingClientRect().top;
 
@@ -160,13 +160,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
                 const progress = time - start;
 
-                const r = (distTopPosition < 0 ?
-                    Math.max(pageY - progress / speed, pageY + distTopPosition) :
-                    Math.min(pageY + progress / speed, pageY + distTopPosition));
+                const result = (distTopPosition < 0 ?
+                    Math.max(scrollPageY - progress / speed, scrollPageY + distTopPosition) :
+                    Math.min(scrollPageY + progress / speed, scrollPageY + distTopPosition));
 
-                window.scrollTo(0, r);
+                window.scrollTo(0, result);
 
-                if (r < pageY + distTopPosition) requestAnimationFrame(step);
+                if (result < scrollPageY + distTopPosition) requestAnimationFrame(step);
             };
 
             requestAnimationFrame(step);
@@ -199,23 +199,6 @@ window.addEventListener('DOMContentLoaded', () => {
             let target = event.target;
 
             target = target.closest('.service-header-tab');
-
-            //старый вариант
-            // while (target !== tabHeader) {
-
-            //     if (target.classList.contains('service-header-tab')) {
-
-            //         tab.forEach((item, i) => {
-
-            //             if (item === target) {
-            //                 toggleTabContent(i);
-            //             }
-
-            //         });
-            //         return;
-            //     }
-            //     target = target.parentNode;
-            // }
 
             if (target) {
                 tab.forEach((item, i) => {
@@ -405,8 +388,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
 
                 const timer = setInterval(() => {
-                    totalValue.textContent = +totalValue.textContent + step;
-                    if ((total - totalValue.textContent) * step < 1) {
+                    totalValue.textContent = +totalValue.textContent + (step * 200);
+                    if ((total - totalValue.textContent) * (step * 200)  < 1) {
                         clearInterval(timer);
                         totalValue.textContent = total;
                     }
@@ -424,9 +407,102 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+
+    //send-ajax-form
+
+    const sendForm = () => {
+
+        const postData = (body, outputData, errorData) => {
+            const request = new XMLHttpRequest();
+
+            request.addEventListener('readystatechange', () => {
+                if (request.readyState !== 4) {
+                    return;
+                }
+                if (request.status === 200) {
+                    outputData();
+                } else {
+                    errorData(request.status);
+                }
+            });
+
+            request.open('POST', './server.php');
+            request.setRequestHeader('Content-Type', 'application/json');
+
+            request.send(JSON.stringify(body));
+        };
+
+        const clearInput = idForm => {
+            const form = document.getElementById(idForm);
+
+            [...form.elements]
+                .filter(item =>
+                    item.tagName.toLowerCase() !== 'button' &&
+					item.type !== 'button')
+                .forEach(item =>
+                    item.value = '');
+        };
+
+        const loadForm = forms => {
+            const form = document.getElementById(forms),
+                statusMessage = document.createElement('div'),
+                errorMessage = 'Что то пошло не так...',
+                loadMessage = 'Загрузка...',
+                successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
+
+            statusMessage.style.cssText = 'font-size: 2rem;';
+
+            form.addEventListener('submit', event => {
+                event.preventDefault();
+                form.appendChild(statusMessage);
+
+                statusMessage.textContent = loadMessage;
+
+                const formData = new FormData(form),
+                    body = {};
+
+                formData.forEach((val, key) => {
+                    body[key] = val;
+                });
+                postData(body, () => {
+                    statusMessage.textContent = successMessage;
+                }, () => {
+                    statusMessage.textContent = errorMessage;
+                });
+                clearInput(forms);
+            });
+
+            form.addEventListener('input', event => {
+                const target = event.target;
+
+                if (target.matches('.form-phone')) {
+                    target.value = target.value.replace(/[^+\d]/g, '');
+                }
+
+                if (target.matches('.form-email')) {
+                    target.value = target.value.replace(/[^A-Za-z ,.@]/gi, '');
+                }
+
+                if (target.name === 'user_name') {
+                    target.value = target.value.replace(/[^А-Яёа-яё ]/gi, '');
+                }
+
+                if (target.matches('.mess')) {
+                    target.value = target.value.replace(/[^А-ЯЁа-яё ,.?!]/gi, '');
+                }
+            });
+        };
+
+        loadForm('form1');
+        loadForm('form2');
+        loadForm('form3');
+        // form.addEventListener('input', isValid);
+    };
+
     addDot();
     changeImg();
     checkCalcBlock();
     calc(100);
+    sendForm();
     slider();
 });
