@@ -451,6 +451,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
 
             statusMessage.style.cssText = 'font-size: 2rem;';
+            statusMessage.style.color = '#fff';
 
             form.addEventListener('submit', event => {
                 event.preventDefault();
