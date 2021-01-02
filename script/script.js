@@ -382,18 +382,22 @@ window.addEventListener('DOMContentLoaded', () => {
                 total = price * typeValue  * squareValue * countValue * dayValue;
             }
 
-            if (totalValue.textContent !== total) {
-                if (totalValue.textContent > total) {
-                    step = -1;
-                }
-
-                const timer = setInterval(() => {
-                    totalValue.textContent = +totalValue.textContent + (step * 200);
-                    if ((total - totalValue.textContent) * (step * 200)  < 1) {
-                        clearInterval(timer);
-                        totalValue.textContent = total;
+            if (calcSquare.value < 200 || calcCount < 40 || calcDay < 30) {
+                if (+totalValue.textContent !== total) {
+                    if (totalValue.textContent > total) {
+                        step = -1;
                     }
-                }, 0);
+
+                    const timer = setInterval(() => {
+                        totalValue.textContent = +totalValue.textContent + (step * 200);
+                        if ((total - totalValue.textContent) * (step * 200)  < 1) {
+                            clearInterval(timer);
+                            totalValue.textContent = total;
+                        }
+                    }, 0);
+                }
+            } else {
+                totalValue.textContent = total;
             }
         };
 
@@ -497,7 +501,6 @@ window.addEventListener('DOMContentLoaded', () => {
         loadForm('form1');
         loadForm('form2');
         loadForm('form3');
-        // form.addEventListener('input', isValid);
     };
 
     addDot();
