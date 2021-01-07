@@ -72,6 +72,7 @@ window.addEventListener('DOMContentLoaded', () => {
     toggleMenu();
 
     // popup
+
     const togglePopUp = () => {
         const popUp = document.querySelector('.popup'),
             popupBtn = document.querySelectorAll('.popup-btn'),
@@ -381,7 +382,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 total = price * typeValue  * squareValue * countValue * dayValue;
             }
 
-            if (calcSquare.value < 200 || calcCount < 40 || calcDay < 30) {
+            if (calcSquare.value > 200 || calcCount.value > 40) {
+                totalValue.textContent = total;
+            } else if (calcSquare.value === 0 || typeValue === '') {
+                totalValue.textContent = 0;
+            } else {
                 if (+totalValue.textContent !== total) {
                     if (totalValue.textContent > total) {
                         step = -1;
@@ -395,8 +400,6 @@ window.addEventListener('DOMContentLoaded', () => {
                         }
                     }, 0);
                 }
-            } else {
-                totalValue.textContent = total;
             }
         };
 
@@ -404,8 +407,8 @@ window.addEventListener('DOMContentLoaded', () => {
             const target  = event.target;
 
             if (target.matches('.calc-day') || target.matches('.calc-type') ||
-            target.matches('.calc-square') || target.matches('.calc-count')) {
-                countSum();
+                target.matches('.calc-square') || target.matches('.calc-count')) {
+                    countSum();
             }
         });
     };
