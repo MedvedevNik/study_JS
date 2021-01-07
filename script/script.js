@@ -382,7 +382,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 total = price * typeValue  * squareValue * countValue * dayValue;
             }
 
-            if (calcSquare.value < 200 || calcCount < 40 || calcDay < 30) {
+            if (calcSquare.value > 200 || calcCount.value > 40) {
+                totalValue.textContent = total;
+            } else if (calcSquare.value === 0 || typeValue === '') {
+                totalValue.textContent = 0;
+            } else {
                 if (+totalValue.textContent !== total) {
                     if (totalValue.textContent > total) {
                         step = -1;
@@ -396,8 +400,6 @@ window.addEventListener('DOMContentLoaded', () => {
                         }
                     }, 0);
                 }
-            } else {
-                totalValue.textContent = total;
             }
         };
 
@@ -405,17 +407,13 @@ window.addEventListener('DOMContentLoaded', () => {
             const target  = event.target;
 
             if (target.matches('.calc-day') || target.matches('.calc-type') ||
-            target.matches('.calc-square') || target.matches('.calc-count')) {
-                countSum();
+                target.matches('.calc-square') || target.matches('.calc-count')) {
+                    countSum();
             }
         });
     };
 
-
-    //send-ajax-form
-
     const sendForm = () => {
-
         const postData = (body, outputData, errorData) => {
             const request = new XMLHttpRequest();
 
@@ -433,7 +431,7 @@ window.addEventListener('DOMContentLoaded', () => {
             request.open('POST', './server.php');
             request.setRequestHeader('Content-Type', 'application/json');
 
-            request.send(JSON.stringify(body));
+            request.send(JSON.stringify(body))
         };
 
         const clearInput = idForm => {
@@ -442,7 +440,7 @@ window.addEventListener('DOMContentLoaded', () => {
             [...form.elements]
                 .filter(item =>
                     item.tagName.toLowerCase() !== 'button' &&
-					item.type !== 'button')
+                                        item.type !== 'button')
                 .forEach(item =>
                     item.value = '');
         };
@@ -450,7 +448,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const loadForm = forms => {
             const form = document.getElementById(forms),
                 statusMessage = document.createElement('div'),
-                errorMessage = 'Что то пошло не так...',
+                errorMessage = 'Что-то пошло не так...',
                 loadMessage = 'Загрузка...',
                 successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
 
@@ -461,6 +459,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 event.preventDefault();
                 form.appendChild(statusMessage);
 
+                statusMessage.style.display = 'block';
                 statusMessage.textContent = loadMessage;
 
                 const formData = new FormData(form),
@@ -475,6 +474,18 @@ window.addEventListener('DOMContentLoaded', () => {
                     statusMessage.textContent = errorMessage;
                 });
                 clearInput(forms);
+
+                if (event.target.matches('#form3')) {
+                    setTimeout(() => {
+                        const popUp = document.querySelector('.popup');
+                        
+                        popUp.style.display = 'none';
+                    }, 3500);
+                } else if (event.target.matches('#form2') || event.target.matches('#form1')) {
+                    setTimeout(() => {
+                        statusMessage.style.display = 'none';
+                    }, 3500);
+                }
             });
 
             form.addEventListener('input', event => {
