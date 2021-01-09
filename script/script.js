@@ -408,7 +408,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
             if (target.matches('.calc-day') || target.matches('.calc-type') ||
                 target.matches('.calc-square') || target.matches('.calc-count')) {
-                countSum();
+                    countSum();
             }
         });
     };
@@ -431,7 +431,7 @@ window.addEventListener('DOMContentLoaded', () => {
             request.open('POST', './server.php');
             request.setRequestHeader('Content-Type', 'application/json');
 
-            request.send(JSON.stringify(body));
+            request.send(JSON.stringify(body))
         };
 
         const clearInput = idForm => {
@@ -492,24 +492,22 @@ window.addEventListener('DOMContentLoaded', () => {
                 const target = event.target;
 
                 if (target.matches('.form-phone')) {
+                    target.setAttribute('pattern', '[8]{1}[0-9]{10}');
                     target.setAttribute('maxlength', 11);
                     if (/\+/.test(target.value)) {
+                        target.setAttribute('pattern', '[+]{1}[0-9]{11}');
                         target.setAttribute('maxlength', 12);
                     }
-                    target.value = target.value.replace(/[^+\d]/g, '');
+                    target.value = target.value.replace(/[^+\d]/g, ''); 
                 }
 
                 if (target.matches('.form-email')) {
                     target.value = target.value.replace(/[^A-Za-z ,.@]/gi, '');
-                    if (!/[A-Za-z0-9]{2,60}\@{1}[\w]{3,15}/.test(target.value)) {
-                        target.style.color = 'red';
-                    } else {
-                        target.style.color = '';
-                    }
+                    target.setAttribute('pattern', '[A-Z0-9._-]+@[a-z0-9.-]+.[a-z]{2,4}$');
                 }
 
                 if (target.name === 'user_name') {
-                    target.setAttribute('minlength', 2);
+                    target.setAttribute('pattern', '[А-ЯЁ]{1}[а-яё]{1,49}');
                     target.setAttribute('maxlength', 50);
                     target.value = target.value.replace(/[^А-Яёа-яё ]/gi, '');
                 }
