@@ -503,7 +503,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
                 if (target.matches('.form-email')) {
                     target.value = target.value.replace(/[^A-Za-z ,.@]/gi, '');
-                    target.setAttribute('pattern', '[A-Z0-9._-]+@[a-z0-9.-]+.[a-z]{2,4}$');
+                    target.setAttribute('pattern', '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$');
                 }
 
                 if (target.name === 'user_name') {
