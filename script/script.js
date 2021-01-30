@@ -430,24 +430,12 @@ window.addEventListener('DOMContentLoaded', () => {
   //send-ajax-form
 
   const sendForm = () => {
-    const postData = body => new Promise((resolve, reject) => {
-      const request = new XMLHttpRequest();
-
-      request.addEventListener('readystatechange', () => {
-        if (request.readyState !== 4) {
-          return;
-        }
-        if (request.status === 200) {
-          resolve();
-        } else {
-          reject(request.status);
-        }
-      });
-
-      request.open('POST', './server.php');
-      request.setRequestHeader('Content-Type', 'application/json');
-
-      request.send(JSON.stringify(body));
+    const postData = body => fetch('./server.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
     });
 
     const clearInput = idForm => {
@@ -478,19 +466,20 @@ window.addEventListener('DOMContentLoaded', () => {
         statusMessage.style.display = 'block';
         statusMessage.textContent = loadMessage;
 
-        const formData = new FormData(form),
-          body = {};
+        // const formData = new FormData(form),
+        //   body = {};
 
-        formData.forEach((val, key) => {
-          body[key] = val;
-        });
+        // formData.forEach((val, key) => {
+        //   body[key] = val;
+        // });
 
-        postData(body)
-          .then(() => {
+        postData(Object.fromEntries(new FormData(form)))
+          .then(response => {
+            if (response.status !== 200) throw new Error(`Status network ${request.status}`);
             statusMessage.textContent = successMessage;
             clearInput(forms);
           })
-          .catch(() => {
+          .catch(error => {
             statusMessage.textContent = errorMessage;
           });
 
