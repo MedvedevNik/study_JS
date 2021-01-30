@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "first work with webpack",
   "scripts": {
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "build": "webpack --config webpack.prod.config.js",
+    "dev": "webpack serve --config webpack.dev.config.js"
   },
   "repository": {
     "type": "git",
@@ -16,9 +18,14 @@
   },
   "homepage": "https://github.com/Pengu1nik/study_JS#readme",
   "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "babel-loader": "^8.2.2",
     "webpack": "^5.19.0",
-    "webpack-cli": "^4.4.0"
+    "webpack-cli": "^4.4.0",
+    "webpack-dev-server": "^3.11.2"
   },
   "main": "index.js",
-  "dependencies": {}
+  "dependencies": {},
+  "keywords": []
 }

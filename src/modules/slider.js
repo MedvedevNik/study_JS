@@ -3,21 +3,19 @@ const slider = () => {
     dot = document.querySelectorAll('.dot'),
     slider = document.querySelector('.portfolio-content');
 
+
   let currentSlide = 0,
     interval;
 
   const prevSlide = (elem, index, strClass) => {
-    console.log(elem[index]);
     elem[index].classList.remove(strClass);
   };
 
   const nextSlide = (elem, index, strClass) => {
-    console.log(elem[index]);
     elem[index].classList.add(strClass);
   };
 
   const autoPlaySlide = () => {
-
     prevSlide(slide, currentSlide, 'portfolio-item-active');
     prevSlide(dot, currentSlide, 'dot-active');
     currentSlide++;
@@ -66,7 +64,7 @@ const slider = () => {
 
 
     if (currentSlide < 0) {
-      currentSlide = slide.length;
+      currentSlide = slide.length - 1;
     }
 
     nextSlide(slide, currentSlide, 'portfolio-item-active');
