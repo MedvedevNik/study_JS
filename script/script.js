@@ -236,11 +236,25 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const slider = () => {
     const slide = document.querySelectorAll('.portfolio-item'),
-      dot = document.querySelectorAll('.dot'),
       slider = document.querySelector('.portfolio-content');
 
     let currentSlide = 0,
       interval;
+
+    const addDot = () => {
+      const portfolioDots = document.querySelector('.portfolio-dots');
+
+      slide.forEach(() => {
+        const dot = document.createElement('li');
+        dot.classList.add('dot');
+        portfolioDots.append(dot);
+      });
+      portfolioDots.children[0].classList.add('dot-active');
+    };
+
+    addDot();
+
+    const dots = document.querySelectorAll('.dot');
 
     const prevSlide = (elem, index, strClass) => {
       elem[index].classList.remove(strClass);
@@ -253,13 +267,13 @@ window.addEventListener('DOMContentLoaded', () => {
     const autoPlaySlide = () => {
 
       prevSlide(slide, currentSlide, 'portfolio-item-active');
-      prevSlide(dot, currentSlide, 'dot-active');
+      prevSlide(dots, currentSlide, 'dot-active');
       currentSlide++;
       if (currentSlide >= slide.length) {
         currentSlide = 0;
       }
       nextSlide(slide, currentSlide, 'portfolio-item-active');
-      nextSlide(dot, currentSlide, 'dot-active');
+      nextSlide(dots, currentSlide, 'dot-active');
     };
 
     const startSlide = (time = 3000) => {
@@ -280,14 +294,14 @@ window.addEventListener('DOMContentLoaded', () => {
       }
 
       prevSlide(slide, currentSlide, 'portfolio-item-active');
-      prevSlide(dot, currentSlide, 'dot-active');
+      prevSlide(dots, currentSlide, 'dot-active');
 
       if (target.matches('#arrow-right')) {
         currentSlide++;
       } else if (target.matches('#arrow-left')) {
         currentSlide--;
       } else if (target.matches('.dot')) {
-        dot.forEach((elem, index) => {
+        dots.forEach((elem, index) => {
           if (elem === target) {
             currentSlide = index;
           }
@@ -300,11 +314,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
       if (currentSlide < 0) {
-        currentSlide = slide.length;
+        currentSlide = slide.length - 1;
       }
 
       nextSlide(slide, currentSlide, 'portfolio-item-active');
-      nextSlide(dot, currentSlide, 'dot-active');
+      nextSlide(dots, currentSlide, 'dot-active');
 
     });
 
@@ -323,19 +337,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     startSlide(1500);
-  };
-
-
-  const addDot = () => {
-    const portfolioItem = document.querySelectorAll('.portfolio-item'),
-      portfolioDots = document.querySelector('.portfolio-dots');
-
-    portfolioItem.forEach(() => {
-      const dot = document.createElement('li');
-      dot.classList.add('dot');
-      portfolioDots.append(dot);
-    });
-    portfolioDots.children[0].classList.add('dot-active');
   };
 
   const changeImg = () => {
@@ -430,6 +431,10 @@ window.addEventListener('DOMContentLoaded', () => {
   //send-ajax-form
 
   const sendForm = () => {
+    const errorMessage = 'Что-то пошло не так...',
+      loadMessage = 'Загрузка...',
+      successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
+
     const postData = body => fetch('./server.php', {
       method: 'POST',
       headers: {
@@ -449,90 +454,80 @@ window.addEventListener('DOMContentLoaded', () => {
           item.value = '');
     };
 
+    const isValid = event => {
+      const target = event.target;
+
+      if (target.matches('.form-phone')) {
+        target.setAttribute('pattern', '[8]{1}[0-9]{10}');
+        target.setAttribute('maxlength', 11);
+        if (/\+/.test(target.value)) {
+          target.setAttribute('pattern', '[+]{1}[0-9]{11}');
+          target.setAttribute('maxlength', 12);
+        }
+        target.value = target.value.replace(/[^+\d]/g, '');
+      }
+
+      if (target.matches('.form-email')) {
+        target.value = target.value.replace(/[^A-Za-z ,.@]/gi, '');
+        target.setAttribute('pattern', '[A-Za-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$');
+      }
+
+      if (target.name === 'user_name') {
+        target.setAttribute('pattern', '[А-ЯЁ]{1}[а-яё]{1,49}');
+        target.setAttribute('maxlength', 50);
+        target.value = target.value.replace(/[^А-Яёа-яё ]/gi, '');
+      }
+
+      if (target.matches('.mess')) {
+        target.value = target.value.replace(/[^А-ЯЁа-яё ,.?!]/gi, '');
+      }
+    };
+
     const loadForm = forms => {
-      const form = document.getElementById(forms),
-        statusMessage = document.createElement('div'),
-        errorMessage = 'Что-то пошло не так...',
-        loadMessage = 'Загрузка...',
-        successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
+      const formId = document.getElementById(forms),
+        statusMessage = document.createElement('div');
 
       statusMessage.style.cssText = 'font-size: 2rem;';
       statusMessage.style.color = '#fff';
 
-      form.addEventListener('submit', event => {
-        event.preventDefault();
-        form.appendChild(statusMessage);
+      formId.appendChild(statusMessage);
 
-        statusMessage.style.display = 'block';
-        statusMessage.textContent = loadMessage;
+      statusMessage.style.display = 'block';
+      statusMessage.textContent = loadMessage;
 
-        // const formData = new FormData(form),
-        //   body = {};
+      postData(Object.fromEntries(new FormData(form)))
+        .then(response => {
+          if (response.status !== 200) throw new Error(`Status network ${request.status}`);
+          statusMessage.textContent = successMessage;
+          clearInput(forms);
+        })
+        .catch(
+          statusMessage.textContent = errorMessage
+        );
 
-        // formData.forEach((val, key) => {
-        //   body[key] = val;
-        // });
+      if (forms === 'form3') {
+        setTimeout(() => {
+          const popUp = document.querySelector('.popup');
 
-        postData(Object.fromEntries(new FormData(form)))
-          .then(response => {
-            if (response.status !== 200) throw new Error(`Status network ${request.status}`);
-            statusMessage.textContent = successMessage;
-            clearInput(forms);
-          })
-          .catch(error => {
-            statusMessage.textContent = errorMessage;
-          });
-
-        if (event.target.matches('#form3')) {
-          setTimeout(() => {
-            const popUp = document.querySelector('.popup');
-
-            popUp.style.display = 'none';
-          }, 3500);
-        } else if (event.target.matches('#form2') || event.target.matches('#form1')) {
-          setTimeout(() => {
-            statusMessage.style.display = 'none';
-          }, 3500);
-        }
-      });
-
-      form.addEventListener('input', event => {
-        const target = event.target;
-
-        if (target.matches('.form-phone')) {
-          target.setAttribute('pattern', '[8]{1}[0-9]{10}');
-          target.setAttribute('maxlength', 11);
-          if (/\+/.test(target.value)) {
-            target.setAttribute('pattern', '[+]{1}[0-9]{11}');
-            target.setAttribute('maxlength', 12);
-          }
-          target.value = target.value.replace(/[^+\d]/g, '');
-        }
-
-        if (target.matches('.form-email')) {
-          target.value = target.value.replace(/[^A-Za-z ,.@]/gi, '');
-          target.setAttribute('pattern', '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$');
-        }
-
-        if (target.name === 'user_name') {
-          target.setAttribute('pattern', '[А-ЯЁ]{1}[а-яё]{1,49}');
-          target.setAttribute('maxlength', 50);
-          target.value = target.value.replace(/[^А-Яёа-яё ]/gi, '');
-        }
-
-        if (target.matches('.mess')) {
-          target.value = target.value.replace(/[^А-ЯЁа-яё ,.?!]/gi, '');
-        }
-      });
+          popUp.style.display = 'none';
+        }, 3500);
+      } else if (forms === 'form2' || forms === 'form1') {
+        setTimeout(() => {
+          statusMessage.style.display = 'none';
+        }, 3500);
+      }
+      formId.addEventListener('input', isValid);
     };
 
-    loadForm('form1');
-    loadForm('form2');
-    loadForm('form3');
+    document.body.addEventListener('submit', event => {
+      event.preventDefault();
+      const target = event.target;
+      if (target.matches('#form2') || target.matches('#form1') || target.matches('#form3')) {
+        loadForm(target.id);
+      }
+    });
   };
 
-
-  addDot();
   changeImg();
   checkCalcBlock();
   calc(100);
