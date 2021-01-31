@@ -7,6 +7,7 @@ import slider from './modules/slider';
 import changeImg from './modules/changeImg';
 import checkCalcBlock from './modules/checkCalcBlock';
 import calc from './modules/calc';
+import falidation from './modules/falidation';
 import sendForm from './modules/sendForm';
 
 // Timer
@@ -25,6 +26,8 @@ changeImg();
 checkCalcBlock();
 //calc
 calc(100);
+//falidation
+falidation();
 //send-ajax-form
 sendForm();
 
