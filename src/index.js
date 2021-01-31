@@ -1,10 +1,8 @@
 
-
 import countTimer from './modules/countTimer';
 import toggleMenu from './modules/toggleMenu';
 import togglePopUp from './modules/togglePopUp';
 import tabs from './modules/tabs';
-import addDot from './modules/addDot';
 import slider from './modules/slider';
 import changeImg from './modules/changeImg';
 import checkCalcBlock from './modules/checkCalcBlock';
@@ -19,8 +17,6 @@ toggleMenu();
 togglePopUp();
 // tabs
 tabs();
-//addDot
-addDot();
 // slider
 slider();
 //changeImg
