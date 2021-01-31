@@ -202,23 +202,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
       target = target.closest('.service-header-tab');
 
-      //старый вариант
-      // while (target !== tabHeader) {
-
-      //     if (target.classList.contains('service-header-tab')) {
-
-      //         tab.forEach((item, i) => {
-
-      //             if (item === target) {
-      //                 toggleTabContent(i);
-      //             }
-
-      //         });
-      //         return;
-      //     }
-      //     target = target.parentNode;
-      // }
-
       if (target) {
         tab.forEach((item, i) => {
           if (item === target) {
@@ -236,11 +219,25 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const slider = () => {
     const slide = document.querySelectorAll('.portfolio-item'),
-      dot = document.querySelectorAll('.dot'),
       slider = document.querySelector('.portfolio-content');
 
     let currentSlide = 0,
       interval;
+
+    const addDot = () => {
+      const portfolioDots = document.querySelector('.portfolio-dots');
+
+      slide.forEach(() => {
+        const dot = document.createElement('li');
+        dot.classList.add('dot');
+        portfolioDots.append(dot);
+      });
+      portfolioDots.children[0].classList.add('dot-active');
+    };
+
+    addDot();
+
+    const dots = document.querySelectorAll('.dot');
 
     const prevSlide = (elem, index, strClass) => {
       elem[index].classList.remove(strClass);
@@ -253,13 +250,13 @@ window.addEventListener('DOMContentLoaded', () => {
     const autoPlaySlide = () => {
 
       prevSlide(slide, currentSlide, 'portfolio-item-active');
-      prevSlide(dot, currentSlide, 'dot-active');
+      prevSlide(dots, currentSlide, 'dot-active');
       currentSlide++;
       if (currentSlide >= slide.length) {
         currentSlide = 0;
       }
       nextSlide(slide, currentSlide, 'portfolio-item-active');
-      nextSlide(dot, currentSlide, 'dot-active');
+      nextSlide(dots, currentSlide, 'dot-active');
     };
 
     const startSlide = (time = 3000) => {
@@ -280,14 +277,14 @@ window.addEventListener('DOMContentLoaded', () => {
       }
 
       prevSlide(slide, currentSlide, 'portfolio-item-active');
-      prevSlide(dot, currentSlide, 'dot-active');
+      prevSlide(dots, currentSlide, 'dot-active');
 
       if (target.matches('#arrow-right')) {
         currentSlide++;
       } else if (target.matches('#arrow-left')) {
         currentSlide--;
       } else if (target.matches('.dot')) {
-        dot.forEach((elem, index) => {
+        dots.forEach((elem, index) => {
           if (elem === target) {
             currentSlide = index;
           }
@@ -300,11 +297,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
       if (currentSlide < 0) {
-        currentSlide = slide.length;
+        currentSlide = slide.length - 1;
       }
 
       nextSlide(slide, currentSlide, 'portfolio-item-active');
-      nextSlide(dot, currentSlide, 'dot-active');
+      nextSlide(dots, currentSlide, 'dot-active');
 
     });
 
@@ -323,19 +320,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     startSlide(1500);
-  };
-
-
-  const addDot = () => {
-    const portfolioItem = document.querySelectorAll('.portfolio-item'),
-      portfolioDots = document.querySelector('.portfolio-dots');
-
-    portfolioItem.forEach(() => {
-      const dot = document.createElement('li');
-      dot.classList.add('dot');
-      portfolioDots.append(dot);
-    });
-    portfolioDots.children[0].classList.add('dot-active');
   };
 
   const changeImg = () => {
@@ -543,7 +527,6 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
 
-  addDot();
   changeImg();
   checkCalcBlock();
   calc(100);
