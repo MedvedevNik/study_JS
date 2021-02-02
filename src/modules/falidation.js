@@ -1,19 +1,17 @@
 const falidation = () => {
 
+  document.body.addEventListener('focus', event => {
+
+    const target = event.target;
+
+    if (target.matches('.form-phone')) {
+      target.setAttribute('placeholder', '+79123456789');
+    }
+  });
+
   document.body.addEventListener('input', event => {
 
     const target = event.target;
-    console.log(target);
-
-    if (target.matches('.form-phone')) {
-      target.setAttribute('pattern', '[8]{1}[0-9]{10}');
-      target.setAttribute('maxlength', 11);
-      if (/\+/.test(target.value)) {
-        target.setAttribute('pattern', '[+]{1}[0-9]{11}');
-        target.setAttribute('maxlength', 12);
-      }
-      target.value = target.value.replace(/[^+\d]/g, '');
-    }
 
     if (target.matches('.form-email')) {
       target.value = target.value.replace(/[^A-Za-z ,.@]/gi, '');

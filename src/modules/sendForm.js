@@ -26,8 +26,6 @@ const sendForm = () => {
     const formId = document.getElementById(forms),
       statusMessage = document.createElement('div');
 
-    console.log(forms);
-
     statusMessage.style.cssText = 'font-size: 2rem;';
     statusMessage.style.color = '#fff';
 
@@ -64,7 +62,6 @@ const sendForm = () => {
     const target = event.target;
     if (target.matches('#form2') || target.matches('#form1') || target.matches('#form3')) {
       loadForm(target.id);
-      target.enable = 'disable';
     }
   });
 };

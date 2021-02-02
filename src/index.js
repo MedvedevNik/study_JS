@@ -7,6 +7,7 @@ import slider from './modules/slider';
 import changeImg from './modules/changeImg';
 import checkCalcBlock from './modules/checkCalcBlock';
 import calc from './modules/calc';
+import maskPhone from './modules/maskPhone';
 import falidation from './modules/falidation';
 import sendForm from './modules/sendForm';
 
@@ -30,7 +31,8 @@ calc(100);
 falidation();
 //send-ajax-form
 sendForm();
-
+//mask
+maskPhone('.form-phone');
 
 //animate
 const anchors = document.querySelectorAll('menu>ul a');

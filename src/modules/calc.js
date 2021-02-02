@@ -43,7 +43,7 @@ const calc = (price = 100) => {
           totalValue.textContent = +totalValue.textContent + (step * 200);
           if ((total - totalValue.textContent) * (step * 200)  < 1) {
             clearInterval(timer);
-            totalValue.textContent = total;
+            totalValue.textContent = Math.round(total);
           }
         }, 0);
       }
